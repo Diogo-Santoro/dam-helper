@@ -1,0 +1,51 @@
+.molecule-module-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  text-align: left;
+}
+
+.molecule-module-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
+}
+
+.molecule-module-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.molecule-module-card__count {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.molecule-module-card__title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.molecule-module-card__description {
+  margin: 0 0 1.25rem 0;
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.45;
+  flex-grow: 1;
+}
+
+.molecule-module-card__footer {
+  margin-top: auto;
+}

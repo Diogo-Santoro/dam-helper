@@ -1,0 +1,65 @@
+name: 🚀 CI - Validar Build y Apuntes
+
+# Se ejecuta cada vez que alguien abre o actualiza un Pull Request hacia la rama main,
+# o cuando se hace push directo a main.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Si un compañero hace varios commits seguidos en el mismo PR,
+# se cancelan las ejecuciones anteriores para ahorrar tiempo y recursos.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validaciones y Compilación
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Descargar el código del repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⚙️ Configurar entorno de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: 📦 Instalar dependencias
+        run: npm ci
+
+      - name: 🌿 Validar nombre de la rama (Reglas de CONTRIBUTING)
+        if: github.event_name == 'pull_request'
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          REGEX="^(apuntes|test|fix|feat|docs|chore|refactor)\/[a-z0-9._-]+$"
+          if [[ ! "$BRANCH_NAME" =~ $REGEX ]]; then
+            echo "::error::❌ El nombre de la rama '$BRANCH_NAME' no cumple con las reglas de CONTRIBUTING.md."
+            echo "Formatos válidos: apuntes/*, test/*, fix/*, feat/*, docs/*, chore/*, refactor/*"
+            exit 1
+          fi
+          echo "✅ Rama válida: $BRANCH_NAME"
+
+      - name: 📝 Validar mensajes de commits (Commitlint)
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          npx commitlint --from origin/${{ github.base_ref }} --to HEAD --verbose
+
+      - name: 🔍 Ejecutar Linter (ESLint)
+        run: npm run lint
+
+      - name: 🎨 Validar formato de código (Prettier)
+        run: npm run format:check
+
+      - name: 🧪 Verificar tipos de TypeScript
+        run: npm run typecheck
+
+      - name: 🏗️ Compilar el proyecto (Build de la web)
+        run: npm run build

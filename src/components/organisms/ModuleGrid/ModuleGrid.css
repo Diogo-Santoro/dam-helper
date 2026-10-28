@@ -1,0 +1,27 @@
+.organism-module-grid {
+  margin-top: 2.5rem;
+}
+
+.organism-module-grid__header {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.organism-module-grid__title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+}
+
+.organism-module-grid__subtitle {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.organism-module-grid__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}

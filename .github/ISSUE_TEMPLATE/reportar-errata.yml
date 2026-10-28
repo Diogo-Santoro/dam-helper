@@ -1,0 +1,37 @@
+name: 🐛 Reportar una errata en apuntes o código
+description: Avisa si hay una errata, un concepto equivocado o código que no compila.
+title: '[ERRATA]: '
+labels: ['errata', 'apuntes']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Gracias por avisar! Indícanos dónde está el error para que podamos corregirlo cuanto antes.
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo afectado
+      options:
+        - Bases de Datos (BD)
+        - Entornos de Desarrollo (ED)
+        - Formación y Orientación Laboral (FOL) / IPE I
+        - Lenguajes de Marcas y Sistemas de Gestión de Información (LMSGI)
+        - Programación (PROG)
+        - Sistemas Informáticos (SI)
+        - General / Web
+    validations:
+      required: true
+  - type: input
+    id: archivo
+    attributes:
+      label: Archivo o tema donde está el error
+      placeholder: "Ej: apuntes/prog/tema-1-poo.md o sección 'Ejemplo Bucles'"
+    validations:
+      required: true
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: ¿Cuál es el error y cuál es la corrección propuesta?
+      placeholder: 'Actualmente pone X, pero debería ser Y porque...'
+    validations:
+      required: true
