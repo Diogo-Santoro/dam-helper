@@ -1,0 +1,34 @@
+name: 📖 Solicitar apuntes o simulador de examen
+description: Pide a la clase resúmenes, esquemas o tests para un examen próximo.
+title: '[PETICIÓN]: '
+labels: ['peticion', 'apuntes']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¿Tienes un examen próximo y necesitas apuntes o ejercicios de algún tema?
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo
+      options:
+        - Bases de Datos (BD)
+        - Entornos de Desarrollo (ED)
+        - Formación y Orientación Laboral (FOL) / IPE I
+        - Lenguajes de Marcas y Sistemas de Gestión de Información (LMSGI)
+        - Programación (PROG)
+        - Sistemas Informáticos (SI)
+    validations:
+      required: true
+  - type: input
+    id: tema
+    attributes:
+      label: Tema o contenido solicitado
+      placeholder: 'Ej: Resumen del tema 3 de SQL y relaciones 1:N'
+    validations:
+      required: true
+  - type: input
+    id: fecha
+    attributes:
+      label: Fecha del examen (opcional)
+      placeholder: 'Ej: Próximo viernes 15 de noviembre'
