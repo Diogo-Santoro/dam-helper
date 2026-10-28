@@ -21,23 +21,24 @@ jobs:
 
     steps:
       - name: 📥 Descargar el código del repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
       - name: ⚙️ Configurar entorno de Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
           node-version: 22
           cache: 'npm'
 
       - name: 📦 Instalar dependencias
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: 🌿 Validar nombre de la rama (Reglas de CONTRIBUTING)
         if: github.event_name == 'pull_request'
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
         run: |
-          BRANCH_NAME="${{ github.head_ref }}"
           REGEX="^(apuntes|test|fix|feat|docs|chore|refactor)\/[a-z0-9._-]+$"
           if [[ ! "$BRANCH_NAME" =~ $REGEX ]]; then
             echo "::error::❌ El nombre de la rama '$BRANCH_NAME' no cumple con las reglas de CONTRIBUTING.md."
@@ -48,9 +49,11 @@ jobs:
 
       - name: 📝 Validar mensajes de commits (Commitlint)
         if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          git fetch origin ${{ github.base_ref }}
-          npx commitlint --from origin/${{ github.base_ref }} --to HEAD --verbose
+          git fetch origin "$BASE_REF"
+          npx commitlint --from "origin/$BASE_REF" --to HEAD --verbose
 
       - name: 🔍 Ejecutar Linter (ESLint)
         run: npm run lint
