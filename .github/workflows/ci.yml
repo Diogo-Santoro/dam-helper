@@ -6,6 +6,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened]
     branches: [main]
 
 # Si un compañero hace varios commits seguidos en el mismo PR,
@@ -66,3 +67,21 @@ jobs:
 
       - name: 🏗️ Compilar el proyecto (Build de la web)
         run: npm run build
+
+      - name: ⚡ Cache SonarQube packages
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: 🔍 SonarQube / SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@d209202bc7d53ff1cc128f7f907dac145c9d6ae9 # v5.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=diogo-santoro-1
+            -Dsonar.projectKey=Diogo-Santoro_dam-helper
+            -Dsonar.sources=src
+            -Dsonar.exclusions=**/node_modules/**,**/dist/**
